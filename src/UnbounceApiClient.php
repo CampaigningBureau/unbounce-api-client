@@ -58,7 +58,7 @@ class UnbounceApiClient
             throw new \InvalidArgumentException('Account Id cannot be empty');
         }
 
-        $response = $this->get("/$accountId/sub_accounts");
+        $response = $this->get("/accounts/$accountId/sub_accounts");
 
         $data = json_decode((string)$response->getBody());
 
@@ -84,7 +84,7 @@ class UnbounceApiClient
             throw new \InvalidArgumentException('SubAccount Id cannot be empty');
         }
 
-        $response = $this->get("sub_accounts/$subAccountId/pages");
+        $response = $this->get("/sub_accounts/$subAccountId/pages");
 
         $data = json_decode((string)$response->getBody());
 
