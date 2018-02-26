@@ -50,8 +50,8 @@ $pages = $my_subaccount->getPages();
 
 ## Still missing
 
-[] More Subaccounts informations:
-    [] Domains
-    [] Leads
-[] Other Resource Routes
-[] OAuth AuthenticationDriver
+* More Subaccounts informations:
+    * Domains
+    * Leads
+* Other Resource Routes
+* OAuth AuthenticationDriver
