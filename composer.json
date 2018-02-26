@@ -1,0 +1,42 @@
+{
+    "name": "campaigningbureau/unbounce-api-client",
+    "description": "A Laravel Package to communicate with the Unbounce API",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christoph Schleifer",
+            "email": "christoph.schleifer@campaigning-bureau.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "illuminate/support": "~5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.2",
+        "orchestra/testbench": "^3.4",
+        "mockery/mockery": "^0.9.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "CampaigningBureau\\UnbounceApiClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CampaigningBureau\\UnbounceApiClient\\Test\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CampaigningBureau\\UnbounceApiClient\\ServiceProvider"
+            ],
+            "aliases": {
+                "Unbounce": "CampaigningBureau\\UnbounceApiClient\\Facade"
+            }
+        }
+    }
+}

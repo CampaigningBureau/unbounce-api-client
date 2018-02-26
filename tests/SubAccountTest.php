@@ -1,0 +1,151 @@
+<?php
+
+namespace CampaigningBureau\UnbounceApiClient\Test;
+
+use CampaigningBureau\UnbounceApiClient\Page;
+use CampaigningBureau\UnbounceApiClient\SubAccount;
+use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountIndexStandardResponse;
+use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountPagesEmptyResponse;
+use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountPagesStandardResponse;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+
+class SubAccountTest extends TestCase
+{
+
+    public function testShouldBeCreateableFromAPIData()
+    {
+        //    arrange
+        $sampleAPIData = json_decode(SubaccountIndexStandardResponse::$sampleSubaccountOne);
+
+        //    act
+        $subaccount = Subaccount::createFromApiData($sampleAPIData);
+
+        //    assert
+        $this->assertEquals('1552433', $subaccount->getId());
+    }
+
+    public function testCreatorFunctionThrowsErrorIfNoIdGiven()
+    {
+        //    assert
+        $this->expectException(\InvalidArgumentException::class);
+
+        //    act
+        Subaccount::createFromApiData('');
+    }
+
+    public function testShouldSetNameFromCreatorMethod()
+    {
+        //    arrange
+        $sampleAPIData = json_decode(SubaccountIndexStandardResponse::$sampleSubaccountOne);
+
+        //    act
+        $subaccount = Subaccount::createFromApiData($sampleAPIData);
+
+        //    assert
+        // $this->assertEquals(1, $subaccount->getDomainCount());
+        $this->assertEquals("Default Client", $subaccount->getName());
+    }
+
+    public function testShouldSetDomainCountFromCreatorMethod()
+    {
+        //    arrange
+        $sampleAPIData = json_decode(SubaccountIndexStandardResponse::$sampleSubaccountOne);
+
+        //    act
+        $subaccount = Subaccount::createFromApiData($sampleAPIData);
+
+        //    assert
+        $this->assertEquals(1, $subaccount->getDomainsCount());
+    }
+
+    public function testShouldSetCreatedAtFromCreatorMethod()
+    {
+        //    arrange
+        $sampleAPIData = json_decode(SubaccountIndexStandardResponse::$sampleSubaccountOne);
+
+        //    act
+        $subaccount = Subaccount::createFromApiData($sampleAPIData);
+
+        //    assert
+        $expectedCreatedAt = new Carbon("2015-12-16T00:34:47.000Z");
+        $this->assertEquals($expectedCreatedAt, $subaccount->getCreatedAt());
+    }
+
+    public function testShouldSetAccountIdFromCreatorMethod()
+    {
+        //    arrange
+        $sampleAPIData = json_decode(SubaccountIndexStandardResponse::$sampleSubaccountOne);
+
+        //    act
+        $subaccount = Subaccount::createFromApiData($sampleAPIData);
+
+        //    assert
+        $this->assertEquals("1456243", $subaccount->getAccountId());
+    }
+
+    public function testShouldHaveAMethodToGetAllPages()
+    {
+        //    arrange
+        $response = new SubaccountPagesStandardResponse();
+        $this->mockUnbounceApi($response);
+        $subaccount = new SubAccount('some_id', 'some_accountId');
+
+        //    act
+        /** @var Collection $pages */
+        $pages = $subaccount->getPages();
+
+        //    assert
+        $this->assertInstanceOf(Collection::class, $pages);
+        $this->assertEquals(2, $pages->count());
+        $this->assertInstanceOf(Page::class, $pages->first());
+    }
+
+    public function testShouldReturnEmptyCollectionIfNoPagesFound()
+    {
+        //    arrange
+        $response = new SubaccountPagesEmptyResponse();
+        $this->mockUnbounceApi($response);
+        $subaccount = new SubAccount('some_id', 'some_accountId');
+
+        //    act
+        /** @var Collection $pages */
+        $pages = $subaccount->getPages();
+
+        //    assert
+        $this->assertInstanceOf(Collection::class, $pages);
+        $this->assertEquals(0, $pages->count());
+    }
+
+    public function testShouldNotCallTheApiIfPagesAreAlreadyLoaded()
+    {
+        //    arrange
+        $response = new SubaccountPagesStandardResponse();
+        // the test fails, if the mocked-api-method is called more than once
+        $this->mockUnbounceApi($response, 1);
+        $subaccount = new SubAccount('some_id', 'some_accountId');
+
+        //    act
+        $subaccount->getPages();
+        $subaccount->getPages();
+
+        //    assert
+        $this->assertTrue(true);
+    }
+
+    public function testShouldReloadThePagesFromApiWhenUsingReloadPages()
+    {
+        //    arrange
+        $response = new SubaccountPagesStandardResponse();
+        // the test fails, if the mocked-api-method is called less than twice
+        $this->mockUnbounceApi($response, 2);
+        $subaccount = new SubAccount('some_id', 'some_accountId');
+
+        //    act
+        $subaccount->getPages();
+        $subaccount->reloadPages();
+
+        //    assert
+        $this->assertTrue(true);
+    }
+}
