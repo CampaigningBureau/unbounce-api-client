@@ -132,7 +132,7 @@ class UnbounceApiClient
                     "The request could not be understood, possible syntax malformation.", $response->getStatusCode()
                 );
             case 401:
-                throw new UnbounceApiException(
+                throw new UnauthorizedApiException(
                     "The request requires user authentication. API Key or Access Token is missing.", $response->getStatusCode()
                 );
             case 403:

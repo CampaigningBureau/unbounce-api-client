@@ -7,6 +7,7 @@ use CampaigningBureau\UnbounceApiClient\SubAccount;
 use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountIndexStandardResponse;
 use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountPagesEmptyResponse;
 use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountPagesStandardResponse;
+use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountPagesUnauthorizedResponse;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -147,5 +148,48 @@ class SubAccountTest extends TestCase
 
         //    assert
         $this->assertTrue(true);
+    }
+
+    public function testShouldHaveAStateUnkownAfterCreation()
+    {
+        // Unfortunately, the Unbounce API has no method to deliver the state of a subaccount
+        // only when getting a 401 unauthorized after loading subroutes, we know it is not active.
+
+        //    arrange
+        $expected_state = SubAccount::stateUnknown;
+
+        //    act
+        $subaccount = new SubAccount('some_id', 'some_account_id');
+
+        //    assert
+        $this->assertEquals($expected_state, $subaccount->getState());
+    }
+
+    public function testShouldHaveAStateOfActiveAfterSuccessfulGetPagesCall()
+    {
+        //    arrange
+        $expected_state = SubAccount::stateActive;
+        $subaccount = new SubAccount('some_id', 'some_account_id');
+        $this->mockUnbounceApi(new SubaccountPagesStandardResponse());
+
+        //    act
+        $subaccount->getPages();
+
+        //    assert
+        $this->assertEquals($expected_state, $subaccount->getState());
+    }
+
+    public function testShouldHaveAStateOfInactiveAfterUnauthorizedGetPagesCall()
+    {
+        //    arrange
+        $expected_state = SubAccount::stateActive;
+        $subaccount = new SubAccount('some_id', 'some_account_id');
+        $this->mockUnbounceApi(new SubaccountPagesUnauthorizedResponse());
+
+        //    act
+        $subaccount->getPages();
+
+        //    assert
+        $this->assertEquals($expected_state, $subaccount->getState());
     }
 }

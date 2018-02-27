@@ -10,6 +10,8 @@ use Unbounce;
 class SubAccount
 {
 
+    const stateUnknown = 'unknown', stateActive = 'active', stateInactive = 'inactive';
+
     /**
      * @var string $id Id of the Subaccount in Unbounce
      */
@@ -41,6 +43,9 @@ class SubAccount
     /** @var Collection $pages All the pages from the SubAccount. */
     private $pages;
 
+    /** @var string $state The State of the Subaccount. `unknown` (default), `active`, `inactive` */
+    private $state;
+
     /**
      * SubAccount constructor.
      */
@@ -48,6 +53,7 @@ class SubAccount
     {
         $this->id = $id;
         $this->accountId = $accountId;
+        $this->state = 'unknown';
     }
 
     public static function createFromApiData($apiData)
@@ -154,7 +160,17 @@ class SubAccount
             return;
         }
 
-        $this->pages = Unbounce::subaccountPages($this->id);
+
+        try
+        {
+            $this->pages = Unbounce::subaccountPages($this->id);
+        } catch (UnauthorizedApiException $e)
+        {
+            //    when we are unauthorized we assume, that this subaccount is inactive
+            $this->state = SubAccount::stateInactive;
+            $this->pages = new Collection();
+        }
+        $this->state = Subaccount::stateActive;
         $this->isPagesLoaded = true;
     }
 
@@ -163,4 +179,13 @@ class SubAccount
         $this->isPagesLoaded = false;
         $this->loadPages(true);
     }
+
+    /**
+     * @return string
+     */
+    public function getState(): string
+    {
+        return $this->state;
+    }
+
 }
