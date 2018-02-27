@@ -39,7 +39,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function getProtocolVersion()
     {
-        // TODO: Implement getProtocolVersion() method.
+
     }
 
     /**
@@ -58,7 +58,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function withProtocolVersion($version)
     {
-        // TODO: Implement withProtocolVersion() method.
+
     }
 
     /**
@@ -88,7 +88,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function getHeaders()
     {
-        // TODO: Implement getHeaders() method.
+
     }
 
     /**
@@ -102,7 +102,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function hasHeader($name)
     {
-        // TODO: Implement hasHeader() method.
+
     }
 
     /**
@@ -122,7 +122,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function getHeader($name)
     {
-        // TODO: Implement getHeader() method.
+
     }
 
     /**
@@ -147,7 +147,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function getHeaderLine($name)
     {
-        // TODO: Implement getHeaderLine() method.
+
     }
 
     /**
@@ -168,7 +168,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function withHeader($name, $value)
     {
-        // TODO: Implement withHeader() method.
+
     }
 
     /**
@@ -190,7 +190,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function withAddedHeader($name, $value)
     {
-        // TODO: Implement withAddedHeader() method.
+
     }
 
     /**
@@ -208,7 +208,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function withoutHeader($name)
     {
-        // TODO: Implement withoutHeader() method.
+
     }
 
     /**
@@ -227,7 +227,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function withBody(StreamInterface $body)
     {
-        // TODO: Implement withBody() method.
+
     }
 
     /**
@@ -254,7 +254,7 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function withStatus($code, $reasonPhrase = '')
     {
-        // TODO: Implement withStatus() method.
+
     }
 
     /**
@@ -272,6 +272,6 @@ class SubaccountPagesUnauthorizedResponse implements GuzzleResponseMock, Respons
      */
     public function getReasonPhrase()
     {
-        // TODO: Implement getReasonPhrase() method.
+
     }
 }
