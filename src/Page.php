@@ -48,19 +48,19 @@ class Page
         }
 
         $page = (new Page($apiData->id))->setName($apiData->name)
-                                        ->setIntegrationsCount(intval($apiData->integrations_count))
+                                        ->setIntegrationsCount(intval($apiData->integrationsCount))
                                         ->setUrl($apiData->url)
                                         ->setDomain($apiData->domain)
-                                        ->setSubAccountId($apiData->sub_account_id)
-                                        ->setVariantsCount(intval($apiData->variants_count))
-                                        ->setIntegrationErrorsCount(intval($apiData->integrations_errors_count))
+                                        ->setSubAccountId($apiData->subAccountId)
+                                        ->setVariantsCount(intval($apiData->variantsCount))
+                                        ->setIntegrationErrorsCount(intval($apiData->integrationsErrorsCount))
                                         ->setState($apiData->state)
-                                        ->setCreatedAt(new Carbon($apiData->created_at));
+                                        ->setCreatedAt(new Carbon($apiData->createdAt));
 
 
-        if (property_exists($apiData,'last_published_at'))
+        if (property_exists($apiData, 'lastPublishedAt'))
         {
-            $page->setLastPublishedAt(new Carbon($apiData->last_published_at));
+            $page->setLastPublishedAt(new Carbon($apiData->lastPublishedAt));
         }
 
         return $page;

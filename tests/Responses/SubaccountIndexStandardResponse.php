@@ -8,8 +8,6 @@
 
 namespace CampaigningBureau\UnbounceApiClient\Test\Responses;
 
-
-use CampaigningBureau\WhatsAToolClient\Msisdn;
 use GuzzleHttp\Psr7\Stream;
 use function GuzzleHttp\Psr7\stream_for;
 
@@ -18,9 +16,9 @@ class SubaccountIndexStandardResponse implements GuzzleResponseMock
 {
 
     public static $sampleSubaccountOne = '{
-                            "account_id" : "1456243",
-                            "created_at" : "2015-12-16T00:34:47.000Z",
-                            "domains_count" : 1,
+                            "accountId" : "1456243",
+                            "createdAt" : "2015-12-16T00:34:47.000Z",
+                            "domainsCount" : 1,
                             "id" : "1552433",
                             "metadata" : {
                               "documentation" : "https://api.unbounce.com:443/doc/sub_accounts",
@@ -28,7 +26,7 @@ class SubaccountIndexStandardResponse implements GuzzleResponseMock
                               "related" : {
                                 "domains" : "https://api.unbounce.com:443/sub_accounts/1552433/domains",
                                 "leads" : "https://api.unbounce.com:443/sub_accounts/1552433/leads",
-                                "page_groups" : "https://api.unbounce.com:443/sub_accounts/1552433/page_groups",
+                                "pageGroups" : "https://api.unbounce.com:443/sub_accounts/1552433/page_groups",
                                 "pages" : "https://api.unbounce.com:443/sub_accounts/1552433/pages"
                               }
                             },
@@ -36,9 +34,9 @@ class SubaccountIndexStandardResponse implements GuzzleResponseMock
                           }';
 
     public static $sampleSubaccountTwo = '{
-                            "account_id" : "1456243",
-                            "created_at" : "2015-12-16T00:55:54.000Z",
-                            "domains_count" : 1,
+                            "accountId" : "1456243",
+                            "createdAt" : "2015-12-16T00:55:54.000Z",
+                            "domainsCount" : 1,
                             "id" : "1552463",
                             "metadata" : {
                               "documentation" : "https://api.unbounce.com:443/doc/sub_accounts",
@@ -46,7 +44,7 @@ class SubaccountIndexStandardResponse implements GuzzleResponseMock
                               "related" : {
                                 "domains" : "https://api.unbounce.com:443/sub_accounts/1552463/domains",
                                 "leads" : "https://api.unbounce.com:443/sub_accounts/1552463/leads",
-                                "page_groups" : "https://api.unbounce.com:443/sub_accounts/1552463/page_groups",
+                                "pageGroups" : "https://api.unbounce.com:443/sub_accounts/1552463/page_groups",
                                 "pages" : "https://api.unbounce.com:443/sub_accounts/1552463/pages"
                               }
                             },
@@ -62,7 +60,7 @@ class SubaccountIndexStandardResponse implements GuzzleResponseMock
                             "documentation" : "https://api.unbounce.com:443/doc/sub_accounts",
                             "location" : "https://api.unbounce.com:443/accounts/1456243/sub_accounts"
                           },
-                          "sub_accounts" : [ ' . SubaccountIndexStandardResponse::$sampleSubaccountOne . ', ' .
+                          "subAccounts" : [ ' . SubaccountIndexStandardResponse::$sampleSubaccountOne . ', ' .
             SubaccountIndexStandardResponse::$sampleSubaccountTwo . ' ],
                           "id" : "https://api.unbounce.com/raml/v0.4/examples/accounts/sub_accounts_get.json"
                         }'

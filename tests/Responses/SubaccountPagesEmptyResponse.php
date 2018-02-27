@@ -9,7 +9,6 @@
 namespace CampaigningBureau\UnbounceApiClient\Test\Responses;
 
 
-use CampaigningBureau\WhatsAToolClient\Msisdn;
 use GuzzleHttp\Psr7\Stream;
 use function GuzzleHttp\Psr7\stream_for;
 
@@ -26,7 +25,7 @@ class SubaccountPagesEmptyResponse implements GuzzleResponseMock
                             "documentation" : "https://api.unbounce.com:443/doc/pages",
                             "location" : "https://api.unbounce.com:443/sub_accounts/1552433/pages",
                             "related" : {
-                              "sub_account" : "https://api.unbounce.com:443/sub_accounts/1552433"
+                              "subAccount" : "https://api.unbounce.com:443/sub_accounts/1552433"
                             }
                           },
                           "pages" : [],

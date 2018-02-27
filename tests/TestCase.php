@@ -21,6 +21,7 @@ class TestCase extends OrchestraTestCase
      */
     protected function getPackageProviders($application)
     {
+        $application['config']->set('unbounce.api_key', 'some_api_key');
         return [ServiceProvider::class];
     }
 
@@ -31,6 +32,9 @@ class TestCase extends OrchestraTestCase
         ];
     }
 
+    /**
+     * @param \Illuminate\Foundation\Application $app
+     */
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('unbounce.api_key', 'some_api_key');

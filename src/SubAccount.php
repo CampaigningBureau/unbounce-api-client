@@ -3,10 +3,8 @@
 namespace CampaigningBureau\UnbounceApiClient;
 
 
-use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountIndexStandardResponse;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Validation\ValidationException;
 use Unbounce;
 
 class SubAccount
@@ -59,9 +57,9 @@ class SubAccount
             throw new \InvalidArgumentException("There must be an id given.");
         }
 
-        return (new SubAccount($apiData->id, $apiData->account_id))->setName($apiData->name)
-                                                                   ->setDomainsCount($apiData->domains_count)
-                                                                   ->setCreatedAt(new Carbon($apiData->created_at));
+        return (new SubAccount($apiData->id, $apiData->accountId))->setName($apiData->name)
+                                                                  ->setDomainsCount($apiData->domainsCount)
+                                                                  ->setCreatedAt(new Carbon($apiData->createdAt));
     }
 
     /**
