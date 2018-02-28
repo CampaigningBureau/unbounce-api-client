@@ -10,6 +10,7 @@ namespace CampaigningBureau\UnbounceApiClient;
 
 use CampaigningBureau\UnbounceApiClient\Authorization\AuthorizationDriver;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
@@ -108,14 +109,17 @@ class UnbounceApiClient
     {
         $request = new Request('GET', UnbounceApiClient::$unbounceAPIBaseUrl . $uri);
         $request = $this->authorizationDriver->prepareRequest($request);
-        $response = $this->guzzleClient->send($request);
 
-        if ($response->getStatusCode() == 200)
+
+        try
         {
-            return $response;
-        }
+            $response = $this->guzzleClient->send($request);
 
-        $this->runErrorHandling($response);
+            return $response;
+        } catch (BadResponseException $badResponseException)
+        {
+            $this->runErrorHandling($badResponseException->getResponse());
+        }
     }
 
     /**

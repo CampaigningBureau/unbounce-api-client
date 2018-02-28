@@ -8,6 +8,9 @@ use CampaigningBureau\UnbounceApiClient\ServiceProvider;
 use CampaigningBureau\UnbounceApiClient\Test\Responses\GuzzleResponseMock;
 use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountIndexStandardResponse;
 use CampaigningBureau\UnbounceApiClient\UnbounceApiClient;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Psr7\Request;
 use Mockery;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -22,6 +25,7 @@ class TestCase extends OrchestraTestCase
     protected function getPackageProviders($application)
     {
         $application['config']->set('unbounce.api_key', 'some_api_key');
+
         return [ServiceProvider::class];
     }
 
@@ -55,9 +59,31 @@ class TestCase extends OrchestraTestCase
             function () use ($times, $unbounceResponse)
             {
                 $guzzle_mock = Mockery::mock('GuzzleHttp\Client');
-                $guzzle_mock->shouldReceive('send')
-                            ->times($times)
-                            ->andReturn($unbounceResponse);
+
+                if ($unbounceResponse->getStatusCode() >= 400 && $unbounceResponse->getStatusCode() < 500)
+                {
+                    $guzzle_mock->shouldReceive('send')
+                                ->andThrow(
+                                    new ClientException(
+                                        'some_message', new Request('Get', 'http://any_url.test'), $unbounceResponse
+                                    )
+                                );
+                }
+                else if ($unbounceResponse->getStatusCode() == 500)
+                {
+                    $guzzle_mock->shouldReceive('send')
+                                ->andThrow(
+                                    new ServerException(
+                                        'some_message', new Request('Get', 'http://any_url.test'), $unbounceResponse
+                                    )
+                                );
+                }
+                else
+                {
+                    $guzzle_mock->shouldReceive('send')
+                                ->times($times)
+                                ->andReturn($unbounceResponse);
+                }
 
                 return new UnbounceApiClient($guzzle_mock, new ApiKeyAuthorizationDriver('sample_api_key'));
             }

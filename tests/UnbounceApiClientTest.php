@@ -5,9 +5,11 @@ namespace CampaigningBureau\UnbounceApiClient\Test;
 use CampaigningBureau\UnbounceApiClient\Authorization\ApiKeyAuthorizationDriver;
 use CampaigningBureau\UnbounceApiClient\Page;
 use CampaigningBureau\UnbounceApiClient\SubAccount;
-use CampaigningBureau\UnbounceApiClient\Test\Responses\GuzzleResponseMock;
 use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountIndexStandardResponse;
+use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountIndexUnauthorizedResponse;
 use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountPagesStandardResponse;
+use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountPagesUnauthorizedResponse;
+use CampaigningBureau\UnbounceApiClient\UnauthorizedApiException;
 use CampaigningBureau\UnbounceApiClient\UnbounceApiClient;
 use Illuminate\Support\Collection;
 use Mockery;
@@ -64,6 +66,18 @@ class UnbounceApiClientTest extends TestCase
         $this->assertEquals('Default Client', $firstSubaccount->getName());
     }
 
+    public function testShouldThrowUnauthorizedApiExceptionWhenUnauthorizedCallOnSubaccounts()
+    {
+        //    arrange
+        $this->mockUnbounceApi(new SubaccountIndexUnauthorizedResponse());
+        $this->expectException(UnauthorizedApiException::class);
+        $this->expectExceptionCode(401);
+
+        //    act
+        Unbounce::subaccounts("the_account_id");
+        //    assert
+    }
+
     public function testPagesReturnsCollectionOfTypePageForSpecificSubaccount()
     {
         //    arrange
@@ -79,5 +93,18 @@ class UnbounceApiClientTest extends TestCase
         $firstPage = $pages->first();
         $this->assertInstanceOf(Page::class, $firstPage);
         $this->assertEquals('Forward Marketing Solutions', $firstPage->getName());
+    }
+
+    public function testtestShouldThrowUnauthorizedApiExceptionWhenUnauthorizedCallOnSubaccountPages()
+    {
+
+        //    arrange
+        $this->mockUnbounceApi(new SubaccountPagesUnauthorizedResponse());
+        $this->expectException(UnauthorizedApiException::class);
+        $this->expectExceptionCode(401);
+
+        //    act
+        Unbounce::subaccountPages("the_subaccount_id");
+        //    assert
     }
 }
