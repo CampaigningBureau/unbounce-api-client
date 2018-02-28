@@ -188,4 +188,26 @@ class SubAccount
         return $this->state;
     }
 
+    public function getActivePageCount()
+    {
+        return $this->pages->filter(
+            function (Page $page)
+            {
+                return $page->isPublished();
+            }
+        )
+                           ->count();
+    }
+
+    public function getInactivePageCount()
+    {
+        return $this->pages->filter(
+            function (Page $page)
+            {
+                return !$page->isPublished();
+            }
+        )
+                           ->count();
+    }
+
 }
