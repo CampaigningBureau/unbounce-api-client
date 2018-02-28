@@ -164,13 +164,13 @@ class SubAccount
         try
         {
             $this->pages = Unbounce::subaccountPages($this->id);
+            $this->state = Subaccount::stateActive;
         } catch (UnauthorizedApiException $e)
         {
             //    when we are unauthorized we assume, that this subaccount is inactive
-            $this->state = SubAccount::stateInactive;
             $this->pages = new Collection();
+            $this->state = SubAccount::stateInactive;
         }
-        $this->state = Subaccount::stateActive;
         $this->isPagesLoaded = true;
     }
 

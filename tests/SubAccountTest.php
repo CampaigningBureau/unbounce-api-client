@@ -182,7 +182,7 @@ class SubAccountTest extends TestCase
     public function testShouldHaveAStateOfInactiveAfterUnauthorizedGetPagesCall()
     {
         //    arrange
-        $expected_state = SubAccount::stateActive;
+        $expected_state = SubAccount::stateInactive;
         $subaccount = new SubAccount('some_id', 'some_account_id');
         $this->mockUnbounceApi(new SubaccountPagesUnauthorizedResponse());
 
