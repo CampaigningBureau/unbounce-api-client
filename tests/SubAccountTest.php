@@ -218,4 +218,17 @@ class SubAccountTest extends TestCase
         //    assert
         $this->assertEquals(1, $subaccount->getInactivePageCount());
     }
+
+    public function testShouldHaveTheCorrectCountOfPagesAfterGetPagesCall()
+    {
+        //    arrange
+        $subaccount = new SubAccount('some_id', 'some_account_id');
+        $this->mockUnbounceApi(new SubaccountPagesStandardResponse());
+
+        //    act
+        $subaccount->getPages();
+
+        //    assert
+        $this->assertEquals(2, $subaccount->getPageCount());
+    }
 }

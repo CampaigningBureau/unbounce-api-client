@@ -210,4 +210,9 @@ class SubAccount
                            ->count();
     }
 
+    public function getPageCount()
+    {
+        return $this->pages->count();
+    }
+
 }
