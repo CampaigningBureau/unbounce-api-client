@@ -142,13 +142,6 @@ class SubAccount
         return $this->pages;
     }
 
-    public function addPage(Page $page): SubAccount
-    {
-        $this->pages->push($page);
-
-        return $this;
-    }
-
     private function loadPages(bool $forceLoad = false): void
     {
         if ($this->isPagesLoaded && !$forceLoad) {
@@ -164,6 +157,13 @@ class SubAccount
             $this->state = SubAccount::stateInactive;
         }
         $this->isPagesLoaded = true;
+    }
+
+    public function addPage(Page $page): SubAccount
+    {
+        $this->pages->push($page);
+
+        return $this;
     }
 
     public function reloadPages(): void
@@ -192,7 +192,7 @@ class SubAccount
         return $this;
     }
 
-    public function getActivePageCount()
+    public function getPublishedPageCount()
     {
         return $this->pages->filter(function (Page $page)
         {
@@ -201,7 +201,7 @@ class SubAccount
                            ->count();
     }
 
-    public function getInactivePageCount()
+    public function getUnpublishedPageCount()
     {
         return $this->pages->filter(function (Page $page)
         {

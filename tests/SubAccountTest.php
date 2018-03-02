@@ -193,7 +193,7 @@ class SubAccountTest extends TestCase
         $this->assertEquals($expected_state, $subaccount->getState());
     }
 
-    public function testShouldHaveTheCorrectCountOfActivePagesAfterGetPagesCall()
+    public function testShouldHaveTheCorrectCountOfPublishedPagesAfterGetPagesCall()
     {
         //    arrange
         $subaccount = new SubAccount('some_id', 'some_account_id');
@@ -203,10 +203,10 @@ class SubAccountTest extends TestCase
         $subaccount->getPages();
 
         //    assert
-        $this->assertEquals(1, $subaccount->getActivePageCount());
+        $this->assertEquals(1, $subaccount->getPublishedPageCount());
     }
 
-    public function testShouldHaveTheCorrectCountOfInactivePagesAfterGetPagesCall()
+    public function testShouldHaveTheCorrectCountOfUnpublishedPagesAfterGetPagesCall()
     {
         //    arrange
         $subaccount = new SubAccount('some_id', 'some_account_id');
@@ -216,7 +216,7 @@ class SubAccountTest extends TestCase
         $subaccount->getPages();
 
         //    assert
-        $this->assertEquals(1, $subaccount->getInactivePageCount());
+        $this->assertEquals(1, $subaccount->getUnpublishedPageCount());
     }
 
     public function testShouldHaveTheCorrectCountOfPagesAfterGetPagesCall()
