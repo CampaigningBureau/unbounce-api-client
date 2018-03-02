@@ -12,29 +12,19 @@ class SubAccount
 
     const stateUnknown = 'unknown', stateActive = 'active', stateInactive = 'inactive';
 
-    /**
-     * @var string $id Id of the Subaccount in Unbounce
-     */
+    /** @var string $id Id of the Subaccount in Unbounce */
     private $id;
 
-    /**
-     * @var string $name The name of the subaccount
-     */
+    /** @var string $name The name of the subaccount */
     private $name;
 
-    /**
-     * @var string $accountId The id of the account the subaccount belongs to.
-     */
+    /** @var string $accountId The id of the account the subaccount belongs to. */
     private $accountId;
 
-    /**
-     * @var int $domainsCount The count of domains this subaccount uses
-     */
+    /** @var int $domainsCount The count of domains this subaccount uses */
     private $domainsCount;
 
-    /**
-     * @var Carbon $createdAt The Timestamp the subaccount was created in Unbounce
-     */
+    /** @var Carbon $createdAt The Timestamp the subaccount was created in Unbounce */
     private $createdAt;
 
     /** @var bool $isPagesLoaded Tells if the pages are already fully loaded */
@@ -54,12 +44,12 @@ class SubAccount
         $this->id = $id;
         $this->accountId = $accountId;
         $this->state = 'unknown';
+        $this->pages = new Collection();
     }
 
     public static function createFromApiData($apiData)
     {
-        if (!isset($apiData->id) || empty($apiData->id))
-        {
+        if (!isset($apiData->id) || empty($apiData->id)) {
             throw new \InvalidArgumentException("There must be an id given.");
         }
 
@@ -94,7 +84,15 @@ class SubAccount
     }
 
     /**
-     * @param int $domainCount
+     * @return int
+     */
+    public function getDomainsCount(): int
+    {
+        return $this->domainsCount;
+    }
+
+    /**
+     * @param int $domainsCount
      *
      * @return SubAccount
      */
@@ -106,11 +104,11 @@ class SubAccount
     }
 
     /**
-     * @return int
+     * @return Carbon
      */
-    public function getDomainsCount(): int
+    public function getCreatedAt(): Carbon
     {
-        return $this->domainsCount;
+        return $this->createdAt;
     }
 
     /**
@@ -126,14 +124,6 @@ class SubAccount
     }
 
     /**
-     * @return Carbon
-     */
-    public function getCreatedAt(): Carbon
-    {
-        return $this->createdAt;
-    }
-
-    /**
      * @return string
      */
     public function getAccountId(): string
@@ -143,8 +133,7 @@ class SubAccount
 
     public function getPages(): Collection
     {
-        if ($this->isPagesLoaded)
-        {
+        if ($this->isPagesLoaded) {
             return $this->pages;
         }
 
@@ -153,20 +142,23 @@ class SubAccount
         return $this->pages;
     }
 
+    public function addPage(Page $page): SubAccount
+    {
+        $this->pages->push($page);
+
+        return $this;
+    }
+
     private function loadPages(bool $forceLoad = false): void
     {
-        if ($this->isPagesLoaded && !$forceLoad)
-        {
+        if ($this->isPagesLoaded && !$forceLoad) {
             return;
         }
 
-
-        try
-        {
+        try {
             $this->pages = Unbounce::subaccountPages($this->id);
             $this->state = Subaccount::stateActive;
-        } catch (UnauthorizedApiException $e)
-        {
+        } catch (UnauthorizedApiException $e) {
             //    when we are unauthorized we assume, that this subaccount is inactive
             $this->pages = new Collection();
             $this->state = SubAccount::stateInactive;
@@ -188,25 +180,33 @@ class SubAccount
         return $this->state;
     }
 
+    /**
+     * @param string $state
+     *
+     * @return SubAccount
+     */
+    public function setState(string $state): SubAccount
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
     public function getActivePageCount()
     {
-        return $this->pages->filter(
-            function (Page $page)
-            {
-                return $page->isPublished();
-            }
-        )
+        return $this->pages->filter(function (Page $page)
+        {
+            return $page->isPublished();
+        })
                            ->count();
     }
 
     public function getInactivePageCount()
     {
-        return $this->pages->filter(
-            function (Page $page)
-            {
-                return !$page->isPublished();
-            }
-        )
+        return $this->pages->filter(function (Page $page)
+        {
+            return !$page->isPublished();
+        })
                            ->count();
     }
 
