@@ -134,6 +134,22 @@ class SubAccountTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function testShouldNotQueryTheApiForPagesIfAPageWasAdded()
+    {
+        //    arrange
+        $response = new SubaccountPagesStandardResponse();
+        // the test fails, if the mocked-api-method is called more than once
+        $this->mockUnbounceApi($response, 0);
+        $subaccount = new SubAccount('some_id', 'some_accountId');
+
+        //    act
+        $subaccount->addPage(new Page('some_id'));
+        $subaccount->getPages();
+
+        //    assert
+        $this->assertTrue(true);
+    }
+
     public function testShouldReloadThePagesFromApiWhenUsingReloadPages()
     {
         //    arrange

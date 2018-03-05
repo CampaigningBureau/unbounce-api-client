@@ -162,6 +162,7 @@ class SubAccount
     public function addPage(Page $page): SubAccount
     {
         $this->pages->push($page);
+        $this->isPagesLoaded = true;
 
         return $this;
     }
