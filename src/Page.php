@@ -229,19 +229,19 @@ class Page
     }
 
     /**
-     * @return mixed
+     * @return Carbon
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): Carbon
     {
         return $this->createdAt;
     }
 
     /**
-     * @param mixed $createdAt
+     * @param Carbon $createdAt
      *
      * @return Page
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(Carbon $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -249,19 +249,19 @@ class Page
     }
 
     /**
-     * @return mixed
+     * @return Carbon
      */
-    public function getLastPublishedAt()
+    public function getLastPublishedAt(): Carbon
     {
         return $this->lastPublishedAt;
     }
 
     /**
-     * @param mixed $lastPublishedAt
+     * @param Carbon $lastPublishedAt
      *
      * @return Page
      */
-    public function setLastPublishedAt($lastPublishedAt)
+    public function setLastPublishedAt(Carbon $lastPublishedAt)
     {
         $this->lastPublishedAt = $lastPublishedAt;
 
