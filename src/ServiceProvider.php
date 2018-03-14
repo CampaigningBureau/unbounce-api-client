@@ -30,7 +30,7 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function register()
     {
-        $authorizationDriver = new ApiKeyAuthorizationDriver(config('unbounce.api_key'));
+        $authorizationDriver = new ApiKeyAuthorizationDriver(config('unbounce.api_key') ?? '');
 
         $this->app->singleton(
             UnbounceApiClient::class,
