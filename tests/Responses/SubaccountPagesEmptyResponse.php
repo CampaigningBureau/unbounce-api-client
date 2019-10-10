@@ -27,7 +27,7 @@ class SubaccountPagesEmptyResponse implements GuzzleResponseMock, ResponseInterf
                             "documentation" : "https://api.unbounce.com:443/doc/pages",
                             "location" : "https://api.unbounce.com:443/sub_accounts/1552433/pages",
                             "related" : {
-                              "subAccount" : "https://api.unbounce.com:443/sub_accounts/1552433"
+                              "sub_account" : "https://api.unbounce.com:443/sub_accounts/1552433"
                             }
                           },
                           "pages" : [],

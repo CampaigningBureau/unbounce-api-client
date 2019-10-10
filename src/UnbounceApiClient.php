@@ -62,7 +62,7 @@ class UnbounceApiClient
         $data = json_decode((string)$response->getBody());
 
         $subAccounts = [];
-        foreach ($data->subAccounts as $subAccountData)
+        foreach ($data->sub_accounts as $subAccountData)
         {
             $subAccounts[] = SubAccount::createFromApiData($subAccountData);
         }

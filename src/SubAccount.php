@@ -53,9 +53,9 @@ class SubAccount
             throw new \InvalidArgumentException("There must be an id given.");
         }
 
-        return (new SubAccount($apiData->id, $apiData->accountId))->setName($apiData->name)
-                                                                  ->setDomainsCount($apiData->domainsCount)
-                                                                  ->setCreatedAt(new Carbon($apiData->createdAt));
+        return (new SubAccount($apiData->id, $apiData->account_id))->setName($apiData->name)
+                                                                   ->setDomainsCount($apiData->domains_count)
+                                                                   ->setCreatedAt(new Carbon($apiData->created_at));
     }
 
     /**
