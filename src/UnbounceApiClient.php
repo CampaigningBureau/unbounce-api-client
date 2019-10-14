@@ -49,8 +49,7 @@ class UnbounceApiClient
      */
     public function subaccounts(string $accountId)
     {
-        if (empty($accountId))
-        {
+        if (empty($accountId)) {
             throw new \InvalidArgumentException('Account Id cannot be empty');
         }
 
@@ -62,8 +61,7 @@ class UnbounceApiClient
         $data = json_decode((string)$response->getBody());
 
         $subAccounts = [];
-        foreach ($data->sub_accounts as $subAccountData)
-        {
+        foreach ($data->sub_accounts as $subAccountData) {
             $subAccounts[] = SubAccount::createFromApiData($subAccountData);
         }
 
@@ -71,15 +69,14 @@ class UnbounceApiClient
     }
 
     /**
-     * @param string $subAccountId
+     * @param string $subAccountId the id of the xubaccount
+     * @param bool   $deepLoad     Load all data of every page (statistics)
      *
      * @return Collection
-     * @throws UnbounceApiException
      */
-    public function subaccountPages(string $subAccountId)
+    public function subaccountPages(string $subAccountId, bool $deepLoad = false)
     {
-        if (empty($subAccountId))
-        {
+        if (empty($subAccountId)) {
             throw new \InvalidArgumentException('SubAccount Id cannot be empty');
         }
 
@@ -91,12 +88,37 @@ class UnbounceApiClient
         $data = json_decode((string)$response->getBody());
 
         $pages = [];
-        foreach ($data->pages as $page)
-        {
-            $pages[] = Page::createFromApiData($page);
+        foreach ($data->pages as $page) {
+            if ($deepLoad) {
+                $pages[] = $this->page($page->id);
+            } else {
+                $pages[] = Page::createFromApiData($page);
+            }
         }
 
         return collect($pages);
+    }
+
+    /**
+     * @param string $pageId
+     *
+     * @return Page
+     * @throws UnbounceApiException
+     */
+    public function page(string $pageId)
+    {
+        if (empty($pageId)) {
+            throw new \InvalidArgumentException('SubAccount Id cannot be empty');
+        }
+
+        $request = $this->createGetRequest("/pages/$pageId");
+
+        $response = $request->send();
+        $data = json_decode((string)$response->getBody());
+
+        $page = Page::createFromApiData($data);
+
+        return $page;
     }
 
     /**

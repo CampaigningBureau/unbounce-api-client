@@ -5,6 +5,7 @@ namespace CampaigningBureau\UnbounceApiClient\Test;
 use CampaigningBureau\UnbounceApiClient\Authorization\ApiKeyAuthorizationDriver;
 use CampaigningBureau\UnbounceApiClient\Page;
 use CampaigningBureau\UnbounceApiClient\SubAccount;
+use CampaigningBureau\UnbounceApiClient\Test\Responses\SinglePageStandardResponse;
 use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountIndexStandardResponse;
 use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountIndexUnauthorizedResponse;
 use CampaigningBureau\UnbounceApiClient\Test\Responses\SubaccountPagesStandardResponse;
@@ -78,7 +79,7 @@ class UnbounceApiClientTest extends TestCase
         //    assert
     }
 
-    public function testPagesReturnsCollectionOfTypePageForSpecificSubaccount()
+    public function testSubaccountPagesReturnsPages()
     {
         //    arrange
         $response = new SubaccountPagesStandardResponse();
@@ -90,9 +91,30 @@ class UnbounceApiClientTest extends TestCase
 
         //    assert
         $this->assertInstanceOf(Collection::class, $pages);
+        /** @var Page $firstPage */
         $firstPage = $pages->first();
         $this->assertInstanceOf(Page::class, $firstPage);
         $this->assertEquals('Forward Marketing Solutions', $firstPage->getName());
+    }
+
+    public function testSubaccountPagesReturnsFullyLoadedPagesOnFlag()
+    {
+        //    arrange
+        $response = new SubaccountPagesStandardResponse();
+        $followUpResponses = new SinglePageStandardResponse();
+        $this->mockUnbounceApiWithMultipleRequests([$response, $followUpResponses]);
+
+        //    act
+        /** @var Collection $pages */
+        $pages = Unbounce::subaccountPages("the_subaccount_id", true);
+
+        //    assert
+        $this->assertInstanceOf(Collection::class, $pages);
+        /** @var Page $firstPage */
+        $firstPage = $pages->first();
+        $this->assertInstanceOf(Page::class, $firstPage);
+        $this->assertEquals('Forward Marketing Solutions', $firstPage->getName());
+        $this->assertEquals(33.33, $firstPage->getConversionRate());
     }
 
     public function testtestShouldThrowUnauthorizedApiExceptionWhenUnauthorizedCallOnSubaccountPages()
@@ -106,5 +128,21 @@ class UnbounceApiClientTest extends TestCase
         //    act
         Unbounce::subaccountPages("the_subaccount_id");
         //    assert
+    }
+
+    public function testPageReturnsSinglePage()
+    {
+        //    arrange
+        $response = new SinglePageStandardResponse();
+        $this->mockUnbounceApi($response);
+
+        //    act
+        /** @var Page $page */
+        $page = Unbounce::page("the_page_id");
+
+        //    assert
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertEquals('Forward Marketing Solutions', $page->getName());
+        $this->assertEquals(33.33, $page->getConversionRate());
     }
 }

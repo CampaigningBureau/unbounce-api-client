@@ -60,30 +60,52 @@ class TestCase extends OrchestraTestCase
             {
                 $guzzle_mock = Mockery::mock('GuzzleHttp\Client');
 
-                if ($unbounceResponse->getStatusCode() >= 400 && $unbounceResponse->getStatusCode() < 500)
-                {
+                if ($unbounceResponse->getStatusCode() >= 400 && $unbounceResponse->getStatusCode() < 500) {
                     $guzzle_mock->shouldReceive('send')
                                 ->andThrow(
                                     new ClientException(
                                         'some_message', new Request('Get', 'http://any_url.test'), $unbounceResponse
                                     )
                                 );
-                }
-                else if ($unbounceResponse->getStatusCode() == 500)
-                {
+                } elseif ($unbounceResponse->getStatusCode() == 500) {
                     $guzzle_mock->shouldReceive('send')
                                 ->andThrow(
                                     new ServerException(
                                         'some_message', new Request('Get', 'http://any_url.test'), $unbounceResponse
                                     )
                                 );
-                }
-                else
-                {
+                } else {
                     $guzzle_mock->shouldReceive('send')
                                 ->times($times)
                                 ->andReturn($unbounceResponse);
                 }
+
+                return new UnbounceApiClient($guzzle_mock, new ApiKeyAuthorizationDriver('sample_api_key'));
+            }
+        );
+
+    }
+
+
+    /**
+     * Mocks multiple Requests for Unbounce. This does not work with error returns.
+     *
+     * @param array[GuzzleResponseMock] $unbounceResponses The Responses to be returned
+     */
+    protected function mockUnbounceApiWithMultipleRequests(array $unbounceResponses = [])
+    {
+        // If no Response is needed, take any
+        $unbounceResponses = $unbounceResponses ?? new SubaccountIndexStandardResponse();
+
+        $this->app->bind(
+            UnbounceApiClient::class,
+            function () use ($unbounceResponses)
+            {
+                $guzzle_mock = Mockery::mock('GuzzleHttp\Client');
+
+                $guzzle_mock->shouldReceive('send')
+                            ->andReturnValues($unbounceResponses);
+
 
                 return new UnbounceApiClient($guzzle_mock, new ApiKeyAuthorizationDriver('sample_api_key'));
             }
