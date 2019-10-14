@@ -131,25 +131,34 @@ class SubAccount
         return $this->accountId;
     }
 
-    public function getPages(): Collection
+    /**
+     * @param bool $deepLoad
+     *
+     * @return Collection
+     */
+    public function getPages(bool $deepLoad = true): Collection
     {
         if ($this->isPagesLoaded) {
             return $this->pages;
         }
 
-        $this->loadPages();
+        $this->loadPages(false, $deepLoad);
 
         return $this->pages;
     }
 
-    private function loadPages(bool $forceLoad = false): void
+    /**
+     * @param bool $forceLoad should all pages be reloaded
+     * @param bool $deepLoad  should all pages are loaded with deep-loading
+     */
+    private function loadPages(bool $forceLoad = false, bool $deepLoad = true): void
     {
         if ($this->isPagesLoaded && !$forceLoad) {
             return;
         }
 
         try {
-            $this->pages = Unbounce::subaccountPages($this->id);
+            $this->pages = Unbounce::subaccountPages($this->id, $deepLoad);
             $this->state = Subaccount::stateActive;
         } catch (UnauthorizedApiException $e) {
             //    when we are unauthorized we assume, that this subaccount is inactive
@@ -167,10 +176,13 @@ class SubAccount
         return $this;
     }
 
-    public function reloadPages(): void
+    /**
+     * @param bool $deepLoad load all pages with details
+     */
+    public function reloadPages(bool $deepLoad = true): void
     {
         $this->isPagesLoaded = false;
-        $this->loadPages(true);
+        $this->loadPages(true, $deepLoad);
     }
 
     /**

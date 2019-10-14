@@ -94,7 +94,7 @@ class SubAccountTest extends TestCase
 
         //    act
         /** @var Collection $pages */
-        $pages = $subaccount->getPages();
+        $pages = $subaccount->getPages(false);
 
         //    assert
         $this->assertInstanceOf(Collection::class, $pages);
@@ -127,8 +127,8 @@ class SubAccountTest extends TestCase
         $subaccount = new SubAccount('some_id', 'some_accountId');
 
         //    act
-        $subaccount->getPages();
-        $subaccount->getPages();
+        $subaccount->getPages(false);
+        $subaccount->getPages(false);
 
         //    assert
         $this->assertTrue(true);
@@ -159,8 +159,8 @@ class SubAccountTest extends TestCase
         $subaccount = new SubAccount('some_id', 'some_accountId');
 
         //    act
-        $subaccount->getPages();
-        $subaccount->reloadPages();
+        $subaccount->getPages(false);
+        $subaccount->reloadPages(false);
 
         //    assert
         $this->assertTrue(true);
@@ -189,7 +189,7 @@ class SubAccountTest extends TestCase
         $this->mockUnbounceApi(new SubaccountPagesStandardResponse());
 
         //    act
-        $subaccount->getPages();
+        $subaccount->getPages(false);
 
         //    assert
         $this->assertEquals($expected_state, $subaccount->getState());
@@ -216,7 +216,7 @@ class SubAccountTest extends TestCase
         $this->mockUnbounceApi(new SubaccountPagesStandardResponse());
 
         //    act
-        $subaccount->getPages();
+        $subaccount->getPages(false);
 
         //    assert
         $this->assertEquals(1, $subaccount->getPublishedPageCount());
@@ -229,7 +229,7 @@ class SubAccountTest extends TestCase
         $this->mockUnbounceApi(new SubaccountPagesStandardResponse());
 
         //    act
-        $subaccount->getPages();
+        $subaccount->getPages(false);
 
         //    assert
         $this->assertEquals(1, $subaccount->getUnpublishedPageCount());
@@ -242,7 +242,7 @@ class SubAccountTest extends TestCase
         $this->mockUnbounceApi(new SubaccountPagesStandardResponse());
 
         //    act
-        $subaccount->getPages();
+        $subaccount->getPages(false);
 
         //    assert
         $this->assertEquals(2, $subaccount->getPageCount());
