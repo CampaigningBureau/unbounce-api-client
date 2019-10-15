@@ -36,6 +36,8 @@ class UnbounceApiRequest
     /** @var array $requestOptions the options that are used for this request */
     private $requestOptions;
 
+    private $apiVersion = "v0.4";
+
     /**
      * UnbounceApiRequest constructor.
      *
@@ -55,6 +57,8 @@ class UnbounceApiRequest
         $this->request = $this->authenticationDriver->prepareRequest(new Request($this->method, $this->uri));
 
         $this->requestOptions = [];
+        // Use V4 of Api
+        $this->requestOptions["headers"] = ["Accept" => "application/vnd.unbounce.api." . $this->apiVersion . "+json"];
     }
 
     /**
